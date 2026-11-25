@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUMANTH Todo List</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{background:#0f172a;color:white;padding:15px;min-height:100vh}
+.header{text-align:center;padding:25px 0 10px}
+.header h1{font-size:30px}
+.header p{color:#94a3b8;margin-top:5px}
+.add-box{display:flex;gap:10px;margin:20px 0}
+.add-box input{flex:1;padding:14px;border-radius:12px;border:none;outline:none;font-size:16px;background:#1e293b;color:white}
+.add-box button{padding:14px 20px;background:#22c55e;color:white;border:none;border-radius:12px;font-weight:bold;font-size:16px}
+.count{display:flex;justify-content:space-between;background:#1e293b;padding:12px 15px;border-radius:10px;color:#cbd5e1;font-size:14px;margin-bottom:15px}
+.task{display:flex;align-items:center;gap:12px;background:#1e293b;padding:14px;border-radius:12px;margin-bottom:10px}
+.task.done{opacity:0.5}
+.task.done span{text-decoration:line-through}
+.task input[type=checkbox]{width:22px;height:22px;accent-color:#22c55e}
+.task span{flex:1;font-size:17px}
+.del{background:#ef4444;color:white;border:none;padding:8px 12px;border-radius:8px;font-size:16px}
+.empty{text-align:center;color:#64748b;margin-top:40px;font-size:16px}
+.clear{width:100%;padding:12px;background:#334155;color:white;border:none;border-radius:10px;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>✅ SUMANTH Todo List</h1>
+<p>Ne Roju Panulu - Eppudu Marchipovu!</p>
+</div>
+
+<div class="add-box">
+<input id="taskInput" placeholder="Kotha pani emi? Ex: Homework cheyyali..." onkeypress="if(event.key==='Enter') addTask()">
+<button onclick="addTask()">+ Add</button>
+</div>
+
+<div class="count">
+<span>Total: <b id="total">0</b></span>
+<span>Done: <b id="done">0</b></span>
+<span>Pending: <b id="pending">0</b></span>
+</div>
+
+<div id="list"></div>
+<button class="clear" onclick="clearAll()">🗑️ Anni Clear Cheyyi</button>
+
+<script>
+let tasks = JSON.parse(localStorage.getItem('sumanth_todos') || '[]');
+function save(){ localStorage.setItem('sumanth_todos', JSON.stringify(tasks)); render(); }
+function addTask(){
+let v=document.getElementById('taskInput').value.trim();
+if(!v) return alert('Pani peru pettu Sumanth!');
+tasks.push({text:v, done:false});
+document.getElementById('taskInput').value='';
+save();
+}
+function toggle(i){ tasks[i].done=!tasks[i].done; save(); }
+function del(i){ tasks.splice(i,1); save(); }
+function clearAll(){ if(confirm('Anni delete cheyyala?')){ tasks=[]; save(); } }
+function render(){
+let html='';
+if(tasks.length===0) html='<p class="empty">Inka pani ledu! 🎉<br>Kotha pani add cheyyi paina.</p>';
+tasks.forEach((t,i)=>{
+html+=`<div class="task ${t.done?'done':''}"><input type="checkbox" ${t.done?'checked':''} onchange="toggle(${i})"><span>${t.text}</span><button class="del" onclick="del(${i})">✕</button></div>`;
+});
+document.getElementById('list').innerHTML=html;
+document.getElementById('total').innerText=tasks.length;
+document.getElementById('done').innerText=tasks.filter(t=>t.done).length;
+document.getElementById('pending').innerText=tasks.filter(t=>!t.done).length;
+}
+render();
+</script>
+</body>
+</html>
