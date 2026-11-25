@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUMANTH Daily Program</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{background:#0f172a;color:white;padding:15px}
+.header{text-align:center;padding:20px 0}
+.header h1{font-size:28px}
+.header p{color:#94a3b8;margin-top:5px}
+.date-box{text-align:center;background:#1e293b;padding:12px;border-radius:10px;font-size:18px;font-weight:bold;color:#fbbf24;margin-bottom:15px}
+.add-box{background:#1e293b;padding:15px;border-radius:15px;display:flex;flex-direction:column;gap:10px}
+.add-box input{padding:12px;border-radius:10px;border:none;outline:none;font-size:16px;background:#334155;color:white}
+.add-box button{padding:13px;background:#f59e0b;color:black;border:none;border-radius:10px;font-weight:bold;font-size:16px}
+.prog{display:flex;gap:12px;background:#1e293b;padding:14px;border-radius:12px;margin-top:10px;align-items:center}
+.prog.done{opacity:0.5}
+.prog.done .work{text-decoration:line-through}
+.time{background:#f59e0b;color:black;padding:8px 10px;border-radius:8px;font-weight:bold;font-size:14px;min-width:80px;text-align:center}
+.work{flex:1;font-size:17px}
+.del{background:#ef4444;color:white;border:none;padding:8px 11px;border-radius:8px}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>📅 SUMANTH Daily Program</h1>
+<p>Roju Emi Eppudu Cheyyalo - Anni Ikkade!</p>
+</div>
+<div class="date-box" id="todayDate"></div>
+
+<div class="add-box">
+<input type="time" id="timeInput" value="10:00">
+<input id="workInput" placeholder="Emi cheyyali? Ex: Meeting ki vellali" onkeypress="if(event.key==='Enter') addProg()">
+<button onclick="addProg()">+ Program Add Cheyyi</button>
+</div>
+
+<div id="list"></div>
+
+<script>
+let progs = JSON.parse(localStorage.getItem('sumanth_daily') || '[{"time":"10:00","work":"Morning 10AM ki meeting ku attend avali","done":false},{"time":"15:30","work":"After lunch 3:30pm ki campa vundhi","done":false}]');
+function save(){ localStorage.setItem('sumanth_daily', JSON.stringify(progs)); render(); }
+function addProg(){
+let t=document.getElementById('timeInput').value;
+let w=document.getElementById('workInput').value.trim();
+if(!w) return alert('Pani peru pettu Sumanth!');
+progs.push({time:t, work:w, done:false});
+progs.sort((a,b)=>a.time.localeCompare(b.time));
+document.getElementById('workInput').value='';
+save();
+}
+function toggle(i){ progs[i].done=!progs[i].done; save(); }
+function del(i){ progs.splice(i,1); save(); }
+function render(){
+let h='';
+if(progs.length===0) h='<p style="text-align:center;color:#64748b;margin-top:30px">Inka Program ledu!</p>';
+progs.forEach((p,i)=>{
+h+=`<div class="prog ${p.done?'done':''}"><div class="time">${p.time}</div><input type="checkbox" ${p.done?'checked':''} onchange="toggle(${i})" style="width:22px;height:22px"><div class="work">${p.work}</div><button class="del" onclick="del(${i})">✕</button></div>`;
+});
+document.getElementById('list').innerHTML=h;
+document.getElementById('todayDate').innerText=new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+}
+render();
+</script>
+</body>
+</html>
