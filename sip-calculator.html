@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sumanth SIP Calculator</title>
+<style>
+*{box-sizing:border-box;font-family:Arial} body{background:#e8f5e9;margin:0;padding:15px}
+.box{max-width:420px;margin:auto;background:#fff;padding:20px;border-radius:15px;box-shadow:0 4px 15px rgba(0,0,0,.1)}
+h2{text-align:center;color:#2e7d32;margin:0} p{text-align:center;color:#777;font-size:13px}
+label{font-weight:bold;font-size:14px;display:block;margin-top:15px}
+input{width:100%;padding:12px;margin-top:5px;border:1px solid #ccc;border-radius:8px;font-size:16px}
+button{width:100%;padding:13px;margin-top:20px;background:#2e7d32;color:#fff;border:none;border-radius:8px;font-size:17px;font-weight:bold}
+.result{background:#f1f8e9;padding:15px;border-radius:10px;margin-top:20px;text-align:center}
+.result b{font-size:24px;color:#2e7d32}
+small{color:#888}
+</style>
+</head>
+<body>
+<div class="box">
+<h2>🌱 SUMANTH SIP CALCULATOR</h2>
+<p>Monthly Investment tho Entha Vastundo Chudu!</p>
+<label>Monthly Investment (₹)</label>
+<input type="number" id="amt" value="5000">
+<label>Expected Return (% per year)</label>
+<input type="number" id="ret" value="12">
+<label>Time Period (Years)</label>
+<input type="number" id="years" value="10">
+<button onclick="calc()">CALCULATE</button>
+<div class="result" id="res" style="display:none">
+<div>Invested: ₹<span id="inv"></span></div>
+<div>Returns: ₹<span id="gain"></span></div><br>
+<b>Maturity: ₹<span id="mat"></span></b><br><small>Made by Sumanth</small>
+</div>
+</div>
+<script>
+function calc(){
+let P=parseFloat(document.getElementById('amt').value);
+let r=parseFloat(document.getElementById('ret').value)/100/12;
+let n=parseFloat(document.getElementById('years').value)*12;
+let fv=P*((Math.pow(1+r,n)-1)/r)*(1+r);
+let inv=P*n;
+document.getElementById('res').style.display='block';
+document.getElementById('inv').innerText=Math.round(inv).toLocaleString('en-IN');
+document.getElementById('gain').innerText=Math.round(fv-inv).toLocaleString('en-IN');
+document.getElementById('mat').innerText=Math.round(fv).toLocaleString('en-IN');
+}
+</script>
+</body>
+</html>
