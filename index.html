@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SUMANTH COLOUR GAME</title>
+<style>
+body{font-family:Arial;text-align:center;background:#fff8dc}
+h1{color:purple;font-size:35px}
+.box{width:150px;height:100px;display:inline-block;margin:10px;border:3px solid black;border-radius:20px;font-size:22px;font-weight:bold;color:white;line-height:100px;cursor:pointer}
+#msg{font-size:28px;font-weight:bold}
+</style>
+</head>
+<body>
+<h1>?? SUMANTH COLOUR GAME ??</h1>
+<h2 id="round">ROUND 1 / 6</h2>
+<h2 id="score">SCORE: 0 ?</h2>
+<h1 id="question">Evaru RED?</h1>
+<p id="msg">Colour ni click cheyyi!</p>
+<div id="options"></div>
+<button onclick="location.reload()" style="font-size:20px;padding:10px 20px;margin-top:20px">MALLI AADU!</button>
+<script>
+let questions=[
+{name:"RED",answer:"RED",opts:["RED","BLUE","GREEN","YELLOW"]},
+{name:"BLUE",answer:"BLUE",opts:["GREEN","BLUE","PINK","ORANGE"]},
+{name:"GREEN",answer:"GREEN",opts:["YELLOW","PURPLE","GREEN","RED"]},
+{name:"YELLOW",answer:"YELLOW",opts:["ORANGE","YELLOW","BLUE","RED"]},
+{name:"PINK",answer:"PINK",opts:["PINK","BROWN","GREEN","BLUE"]},
+{name:"ORANGE",answer:"ORANGE",opts:["RED","ORANGE","PURPLE","GREEN"]},
+];
+let colors={RED:"red",BLUE:"blue",GREEN:"green",YELLOW:"#e6c200",PINK:"pink",ORANGE:"orange",PURPLE:"purple",BROWN:"brown"};
+let round=0,score=0;
+function show(){
+document.getElementById("round").innerText="ROUND "+(round+1)+" / 6";
+document.getElementById("score").innerText="SCORE: "+score+" ?";
+document.getElementById("question").innerText="Evaru "+questions[round].name+"?";
+let div=document.getElementById("options");div.innerHTML="";
+questions[round].opts.forEach(c=>{
+let d=document.createElement("div");d.className="box";d.style.background=colors[c];d.innerText=c;
+d.onclick=()=>{if(c===questions[round].answer){score++;document.getElementById("msg").innerText="CORRECT!!! ??????";}else{document.getElementById("msg").innerText="OOPS! Try Again! ??";}
+setTimeout(()=>{round++;if(round<6){document.getElementById("msg").innerText="Colour ni click cheyyi!";show();}else{document.getElementById("question").innerText="GAME OVER! ??";document.getElementById("msg").innerText="FINAL SCORE: "+score+" / 6 ?? FRUIT KING!";document.getElementById("options").innerHTML="";}},1000);};
+div.appendChild(d);});
+}
+show();
+</script>
+</body>
+</html>

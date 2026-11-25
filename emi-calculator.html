@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUMANTH EMI CALCULATOR</title>
+<style>
+body{font-family:Arial;text-align:center;background:#FFF3E0;padding:15px}
+h1{color:#E65100}
+.box{background:white;padding:20px;border-radius:20px;max-width:450px;margin:auto;box-shadow:0 4px 10px #aaa;text-align:left}
+label{font-weight:bold;display:block;margin-top:12px}
+input{padding:12px;font-size:18px;width:92%;border-radius:10px;border:2px solid #FF9800}
+.btn{padding:13px;font-size:19px;background:#E65100;color:white;border:none;border-radius:12px;width:100%;margin-top:15px;cursor:pointer}
+.result{background:#FFF8E1;padding:15px;border-radius:14px;margin-top:15px;text-align:center}
+.result b{font-size:22px}
+</style>
+</head>
+<body>
+<h1>💰 SUMANTH<br>EMI CALCULATOR</h1>
+<div class="box">
+<label>Loan Amount (₹) - Entha Techukunnav?</label>
+<input type="number" id="loan" placeholder="Ex: 100000" value="100000">
+<label>Vaddi % - Nelaki / Samvatsaram ki?</label>
+<input type="number" id="rate" placeholder="Ex: 12" value="12">
+<label>Nelalu - Enni Nelalu Kattali?</label>
+<input type="number" id="months" placeholder="Ex: 12" value="12">
+<button class="btn" onclick="calc()">EMI CHUDU 📊</button>
+<div class="result" id="res">
+<p>EMI Ikkada Kanipistundi</p>
+</div>
+</div>
+<script>
+function calc(){
+let P=parseFloat(document.getElementById('loan').value);
+let R=parseFloat(document.getElementById('rate').value)/1200;
+let N=parseFloat(document.getElementById('months').value);
+let emi=P*R*Math.pow(1+R,N)/(Math.pow(1+R,N)-1);
+let total=emi*N;
+let interest=total-P;
+document.getElementById('res').innerHTML=
+`Nelaki EMI: <b style="color:#E65100">₹${Math.round(emi).toLocaleString('en-IN')}</b><br><br>
+Total Kattedi: ₹${Math.round(total).toLocaleString('en-IN')}<br>
+Vaddi Matrame: ₹${Math.round(interest).toLocaleString('en-IN')}<br><br>
+<small>Roju Lekka: ₹${Math.round(emi/30)} / Roju</small>`;
+}
+calc();
+</script>
+</body>
+</html>
