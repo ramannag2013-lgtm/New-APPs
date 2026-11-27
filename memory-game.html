@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUMANTH Memory Game 🎮</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{background:linear-gradient(135deg,#ff6b6b,#feca57,#48dbfb,#ff9ff3);background-size:300% 300%;animation:bg 10s ease infinite;min-height:100vh;padding:15px}
+@keyframes bg{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.box{max-width:520px;margin:auto}
+.header{text-align:center;background:white;padding:18px;border-radius:20px;box-shadow:0 10px 25px rgba(0,0,0,.2);margin-bottom:15px}
+.header h1{font-size:26px;background:linear-gradient(90deg,#ff6b6b,#6c5ce7,#00b894);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.info{display:flex;gap:10px;margin-bottom:15px}
+.info div{flex:1;background:white;padding:12px;border-radius:15px;text-align:center;font-weight:bold;box-shadow:0 5px 15px rgba(0,0,0,.15)}
+.info span{color:#e17055}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.card{aspect-ratio:1;background:linear-gradient(135deg,#6c5ce7,#a29bfe);border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:32px;cursor:pointer;color:white;box-shadow:0 5px 15px rgba(0,0,0,.2);transition:.3s}
+.card:hover{transform:scale(1.05)}
+.card.open{background:white;transform:rotateY(180deg)}
+.card.matched{background:linear-gradient(135deg,#00b894,#55efc4);transform:scale(.95)}
+.btn{width:100%;padding:14px;background:white;border:none;border-radius:12px;font-weight:bold;font-size:18px;margin-top:15px;cursor:pointer;box-shadow:0 5px 15px rgba(0,0,0,.2)}
+.win{text-align:center;background:white;padding:25px;border-radius:20px;margin-top:15px;display:none}
+.win h2{font-size:28px}
+</style>
+</head>
+<body>
+<div class="box">
+<div class="header">
+<h1>🎮 SUMANTH Memory Game</h1>
+<p>Same Emoji Match Cheyyi!</p>
+</div>
+<div class="info">
+<div>Moves: <span id="moves">0</span></div>
+<div>Matched: <span id="matched">0</span> / 8</div>
+<div>Time: <span id="time">0s</span></div>
+</div>
+<div class="grid" id="grid"></div>
+<button class="btn" onclick="startGame()">🔄 Malli Aadu</button>
+<div class="win" id="win">
+<h2>🎉 GELICHAV SUMANTH! 🎉</h2>
+<p id="winText" style="margin-top:10px;font-size:18px"></p>
+</div>
+</div>
+<script>
+let emojis=['🍎','🍎','🍌','🍌','🍇','🍇','🍓','🍓','🐶','🐶','🐱','🐱','⚽','⚽','🚗','🚗'];
+let first=null, lock=false, moves=0, matched=0, sec=0, timer=null, started=false;
+
+function startGame(){
+emojis.sort(()=>Math.random()-0.5);
+moves=0; matched=0; sec=0; first=null; lock=false; started=false;
+clearInterval(timer);
+document.getElementById('moves').innerText=0;
+document.getElementById('matched').innerText=0;
+document.getElementById('time').innerText='0s';
+document.getElementById('win').style.display='none';
+document.getElementById('grid').innerHTML=emojis.map((e,i)=>`<div class="card" data-i="${i}" onclick="flip(this)">?</div>`).join('');
+}
+function flip(el){
+if(lock || el.classList.contains('open') || el.classList.contains('matched')) return;
+if(!started){ started=true; timer=setInterval(()=>{sec++; document.getElementById('time').innerText=sec+'s';},1000); }
+el.classList.add('open'); el.innerText=emojis[el.dataset.i];
+if(!first){ first=el; return; }
+moves++; document.getElementById('moves').innerText=moves;
+if(first.innerText===el.innerText){
+first.classList.add('matched'); el.classList.add('matched');
+matched++; document.getElementById('matched').innerText=matched;
+first=null;
+if(matched===8){
+clearInterval(timer);
+document.getElementById('win').style.display='block';
+document.getElementById('winText').innerText=`Nuvvu ${moves} Moves lo, ${sec} Seconds lo Gelichav! 🔥`;
+}
+} else {
+lock=true;
+setTimeout(()=>{ first.classList.remove('open'); el.classList.remove('open'); first.innerText='?'; el.innerText='?'; first=null; lock=false; },800);
+}
+}
+startGame();
+</script>
+</body>
+</html>
