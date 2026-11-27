@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUMANTH Quiz App</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{background:#0f172a;color:white;padding:15px;display:flex;justify-content:center}
+.box{width:100%;max-width:500px}
+.header{text-align:center;padding:20px 0}
+.header h1{font-size:28px}
+.header p{color:#94a3b8;margin-top:5px}
+.score-box{background:#1e293b;padding:15px;border-radius:12px;text-align:center;font-size:18px;font-weight:bold;margin-bottom:15px}
+.score-box span{color:#fbbf24}
+.q-box{background:#1e293b;padding:20px;border-radius:15px}
+.q-box h2{font-size:20px;margin-bottom:15px;line-height:1.4}
+.opt{background:#334155;padding:14px;border-radius:10px;margin-bottom:10px;font-size:17px;cursor:pointer;border:2px solid transparent}
+.opt:hover{border-color:#f59e0b}
+.opt.correct{background:#22c55e!important;color:white}
+.opt.wrong{background:#ef4444!important;color:white}
+.btn{width:100%;padding:14px;background:#f59e0b;color:black;border:none;border-radius:10px;font-weight:bold;font-size:17px;margin-top:10px;display:none}
+.result{text-align:center;background:#1e293b;padding:30px;border-radius:15px;display:none}
+.result h2{font-size:30px;margin-bottom:10px}
+.result p{font-size:20px;color:#94a3b8}
+</style>
+</head>
+<body>
+<div class="box">
+<div class="header">
+<h1>🧠 SUMANTH Quiz App</h1>
+<p>5 Questions - Nuvvu Entha Smart oo Chuddam!</p>
+</div>
+<div class="score-box">Question <span id="qNum">1</span> / 5 | Score: <span id="score">0</span></div>
+
+<div class="q-box" id="quizBox">
+<h2 id="question"></h2>
+<div id="options"></div>
+<button class="btn" id="nextBtn" onclick="nextQ()">Next Question ➡️</button>
+</div>
+
+<div class="result" id="resultBox">
+<h2>🎉 Quiz Ayipoyindi!</h2>
+<p id="finalScore"></p>
+<p id="msg" style="margin-top:10px;color:#fbbf24;font-weight:bold"></p>
+<button class="btn" style="display:block" onclick="location.reload()">Malli Aadu 🔄</button>
+</div>
+</div>
+
+<script>
+let questions=[
+{q:"India Capital enti?",o:["Mumbai","New Delhi","Chennai","Kolkata"],a:1},
+{q:"2 + 2 x 2 = ?",o:["6","8","4","10"],a:0},
+{q:"Mana State Andhra Pradesh Capital enti?",o:["Vizag","Vijayawada","Amaravati","Guntur"],a:2},
+{q:"Sun e dikku nundi vasthundi?",o:["West","North","East","South"],a:2},
+{q:"HTML ante enti?",o:["Hyper Text Markup Language","High Text Machine Language","Hyper Tool Markup Language","None"],a:0}
+];
+let cur=0,score=0,answered=false;
+function loadQ(){
+answered=false;
+document.getElementById('qNum').innerText=cur+1;
+document.getElementById('question').innerText=(cur+1)+". "+questions[cur].q;
+let h='';
+questions[cur].o.forEach((opt,i)=>{
+h+=`<div class="opt" onclick="check(${i},this)">${opt}</div>`;
+});
+document.getElementById('options').innerHTML=h;
+document.getElementById('nextBtn').style.display='none';
+}
+function check(i,el){
+if(answered) return;
+answered=true;
+let all=document.querySelectorAll('.opt');
+if(i===questions[cur].a){ el.classList.add('correct'); score++; document.getElementById('score').innerText=score; }
+else{ el.classList.add('wrong'); all[questions[cur].a].classList.add('correct'); }
+document.getElementById('nextBtn').style.display='block';
+}
+function nextQ(){
+cur++;
+if(cur<questions.length) loadQ();
+else{
+document.getElementById('quizBox').style.display='none';
+document.getElementById('resultBox').style.display='block';
+document.getElementById('finalScore').innerText="Nee Score: "+score+" / 5";
+let m=score===5?"Super Sumanth! Full Marks! 🔥":score>=3?"Bagundi Sumanth! 👏":"Try Again Sumanth! 💪";
+document.getElementById('msg').innerText=m;
+}
+}
+loadQ();
+</script>
+</body>
+</html>
