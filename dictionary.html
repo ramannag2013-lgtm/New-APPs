@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUMANTH Dictionary 📖</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{background:linear-gradient(135deg,#a29bfe,#fd79a8,#fdcb6e,#55efc4);background-size:300% 300%;animation:bg 10s ease infinite;min-height:100vh;padding:15px}
+@keyframes bg{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.box{max-width:600px;margin:auto}
+.header{text-align:center;background:white;padding:20px;border-radius:20px;box-shadow:0 10px 25px rgba(0,0,0,.2);margin-bottom:15px}
+.header h1{font-size:28px;background:linear-gradient(90deg,#e17055,#6c5ce7,#00b894);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.search{width:100%;padding:14px 18px;border:2px solid #dfe6e9;border-radius:15px;font-size:18px;outline:none;margin-top:12px}
+.search:focus{border-color:#6c5ce7}
+.cats{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:15px 0}
+.cats button{padding:8px 14px;border:none;border-radius:20px;background:white;font-weight:bold;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.15)}
+.cats button.active{background:#6c5ce7;color:white}
+.count{text-align:center;color:white;font-weight:bold;margin-bottom:10px}
+.card{background:white;padding:16px;border-radius:16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 5px 15px rgba(0,0,0,.15)}
+.left{flex:1}
+.telugu{font-size:22px;font-weight:bold;color:#2d3436}
+.english{font-size:18px;color:#6c5ce7;font-weight:bold}
+.pron{font-size:13px;color:#636e72;margin-top:2px}
+.emoji{font-size:38px;margin-left:10px}
+.badge{font-size:11px;background:#dfe6e9;padding:3px 8px;border-radius:10px}
+</style>
+</head>
+<body>
+<div class="box">
+<div class="header">
+<h1>📖 SUMANTH Dictionary</h1>
+<p>Telugu ➡️ English Nerchuko!</p>
+<input class="search" id="search" placeholder="🔍 Word Vethuku... Ex: Kukka, Pusthakam" oninput="show()">
+</div>
+<div class="cats" id="cats"></div>
+<div class="count" id="count"></div>
+<div id="list"></div>
+</div>
+<script>
+let words=[
+{t:"Kukka",e:"Dog",p:"kuk-ka",c:"Animals",em:"🐶"},
+{t:"Pilli",e:"Cat",p:"pil-li",c:"Animals",em:"🐱"},
+{t:"Pakshi",e:"Bird",p:"pak-shi",c:"Animals",em:"🐦"},
+{t:"Chepa",e:"Fish",p:"che-pa",c:"Animals",em:"🐟"},
+{t:"Yenugu",e:"Elephant",p:"ye-nu-gu",c:"Animals",em:"🐘"},
+{t:"Simham",e:"Lion",p:"sim-ham",c:"Animals",em:"🦁"},
+{t:"Puli",e:"Tiger",p:"pu-li",c:"Animals",em:"🐯"},
+{t:"Kothi",e:"Monkey",p:"ko-thi",c:"Animals",em:"🐒"},
+{t:"Aavu",e:"Cow",p:"aa-vu",c:"Animals",em:"🐄"},
+{t:"Gurrem",e:"Horse",p:"gur-rem",c:"Animals",em:"🐴"},
+{t:"Pandu",e:"Fruit",p:"pan-du",c:"Fruits",em:"🍎"},
+{t:"Arati Pandu",e:"Banana",p:"a-ra-ti pan-du",c:"Fruits",em:"🍌"},
+{t:"Mamidi Pandu",e:"Mango",p:"ma-mi-di",c:"Fruits",em:"🥭"},
+{t:"Draksha",e:"Grapes",p:"drak-sha",c:"Fruits",em:"🍇"},
+{t:"Naranja",e:"Orange",p:"na-ran-ja",c:"Fruits",em:"🍊"},
+{t:"Pusthakam",e:"Book",p:"pus-tha-kam",c:"School",em:"📚"},
+{t:"Kalam",e:"Pen",p:"ka-lam",c:"School",em:"🖊️"},
+{t:"Badi",e:"School",p:"ba-di",c:"School",em:"🏫"},
+{t:"Upadhyayudu",e:"Teacher",p:"u-pa-dhya-yu-du",c:"School",em:"👨‍🏫"},
+{t:"Pata",e:"Lesson",p:"pa-ta",c:"School",em:"📖"},
+{t:"Illu",e:"House",p:"il-lu",c:"Home",em:"🏠"},
+{t:"Amma",e:"Mother",p:"am-ma",c:"Family",em:"👩"},
+{t:"Nanna",e:"Father",p:"nan-na",c:"Family",em:"👨"},
+{t:"Anna",e:"Elder Brother",p:"an-na",c:"Family",em:"👦"},
+{t:"Chelli",e:"Younger Sister",p:"chel-li",c:"Family",em:"👧"},
+{t:"Sneham",e:"Friend",p:"sne-ham",c:"Family",em:"🤝"},
+{t:"Neeru",e:"Water",p:"nee-ru",c:"Food",em:"💧"},
+{t:"Annam",e:"Rice / Food",p:"an-nam",c:"Food",em:"🍚"},
+{t:"Palu",e:"Milk",p:"pa-lu",c:"Food",em:"🥛"},
+{t:"Suryaudu",e:"Sun",p:"sur-yu-du",c:"Nature",em:"☀️"},
+{t:"Chandrudu",e:"Moon",p:"chan-dru-du",c:"Nature",em:"🌙"},
+{t:"Nakshatram",e:"Star",p:"nak-sha-tram",c:"Nature",em:"⭐"},
+{t:"Chettu",e:"Tree",p:"chet-tu",c:"Nature",em:"🌳"},
+{t:"Puvvu",e:"Flower",p:"puv-vu",c:"Nature",em:"🌸"},
+{t:"Aata",e:"Game",p:"aa-ta",c:"Fun",em:"🎮"},
+{t:"Navvu",e:"Laugh / Smile",p:"nav-vu",c:"Fun",em:"😄"},
+{t:"Prema",e:"Love",p:"pre-ma",c:"Fun",em:"❤️"},
+];
+
+let cats=["All","Animals","Fruits","School","Family","Food","Nature","Home","Fun"];
+let active="All";
+document.getElementById('cats').innerHTML=cats.map(c=>`<button onclick="setCat('${c}')" class="${c==='All'?'active':''}" id="btn-${c}">${c}</button>`).join('');
+
+function setCat(c){
+active=c;
+document.querySelectorAll('.cats button').forEach(b=>b.classList.remove('active'));
+document.getElementById('btn-'+c).classList.add('active');
+show();
+}
+function show(){
+let q=document.getElementById('search').value.toLowerCase();
+let f=words.filter(w=>{
+let matchCat= active==="All" || w.c===active;
+let matchQ= w.t.toLowerCase().includes(q) || w.e.toLowerCase().includes(q);
+return matchCat && matchQ;
+});
+document.getElementById('count').innerText=`${f.length} Words Dorikayi!`;
+document.getElementById('list').innerHTML=f.map(w=>`
+<div class="card">
+<div class="left">
+<div class="telugu">${w.t} <span class="badge">${w.c}</span></div>
+<div class="english">➡️ ${w.e}</div>
+<div class="pron">🔊 ${w.p}</div>
+</div>
+<div class="emoji">${w.em}</div>
+</div>`).join('') || `<div style="background:white;padding:20px;border-radius:15px;text-align:center">😔 Word Dorakaledu... Inko Word Try Cheyyi!</div>`;
+}
+show();
+</script>
+</body>
+</html>
