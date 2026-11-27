@@ -1,0 +1,171 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUMANTH Homework Reminder 📚</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{background:linear-gradient(135deg,#6c5ce7,#00cec9,#fdcb6e,#ff7675);background-size:300% 300%;animation:bg 10s ease infinite;min-height:100vh;padding:15px}
+@keyframes bg{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.box{max-width:550px;margin:auto}
+.header{text-align:center;background:white;padding:20px;border-radius:20px;box-shadow:0 10px 25px rgba(0,0,0,.2);margin-bottom:15px}
+.header h1{font-size:26px;background:linear-gradient(90deg,#6c5ce7,#e17055);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.time-box{background:#6c5ce7;color:white;padding:12px;border-radius:12px;font-size:22px;font-weight:bold;margin-top:10px}
+.form{background:white;padding:18px;border-radius:20px;box-shadow:0 10px 25px rgba(0,0,0,.15);margin-bottom:15px}
+.form input,.form select{width:100%;padding:12px;margin-bottom:10px;border:2px solid #dfe6e9;border-radius:12px;font-size:16px;outline:none}
+.form input:focus{border-color:#6c5ce7}
+.add{width:100%;padding:13px;background:linear-gradient(90deg,#6c5ce7,#00b894);color:white;border:none;border-radius:12px;font-weight:bold;font-size:17px;cursor:pointer}
+.filter{display:flex;gap:8px;margin-bottom:12px}
+.filter button{flex:1;padding:10px;border:none;border-radius:12px;background:white;font-weight:bold;cursor:pointer}
+.filter button.active{background:#2d3436;color:white}
+.card{background:white;padding:15px;border-radius:16px;margin-bottom:10px;display:flex;gap:12px;align-items:center;box-shadow:0 5px 15px rgba(0,0,0,.12)}
+.card.done{opacity:.6}
+.card.done .title{text-decoration:line-through}
+.emoji{font-size:32px}
+.info{flex:1}
+.title{font-weight:bold;font-size:17px}
+.sub{font-size:13px;color:#636e72}
+.time{font-size:12px;background:#ffeaa7;padding:3px 8px;border-radius:10px;font-weight:bold;display:inline-block;margin-top:4px}
+.del{background:#ff7675;color:white;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:16px}
+.check{width:28px;height:28px;cursor:pointer;accent-color:#00b894}
+.progress{background:white;padding:15px;border-radius:16px;text-align:center;margin-bottom:12px;font-weight:bold}
+.bar{height:12px;background:#dfe6e9;border-radius:10px;overflow:hidden;margin-top:8px}
+.fill{height:100%;background:linear-gradient(90deg,#00b894,#55efc4);transition:.5s}
+.alarm{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:99;padding:20px}
+.alarm-box{background:white;padding:30px;border-radius:25px;text-align:center;max-width:400px;width:100%;animation:pop .3s}
+@keyframes pop{from{transform:scale(.8)}to{transform:scale(1)}}
+.alarm-box h2{font-size:26px}
+</style>
+</head>
+<body>
+<div class="box">
+<div class="header">
+<h1>📚 SUMANTH Homework</h1>
+<p>Roju Homework - Marchipoku!</p>
+<div class="time-box" id="clock">--:--:--</div>
+<p style="font-size:13px;margin-top:6px" id="today"></p>
+</div>
+
+<div class="progress">
+<span id="progText">0 / 0 Ayipoyindi!</span>
+<div class="bar"><div class="fill" id="fill" style="width:0%"></div></div>
+</div>
+
+<div class="form">
+<input id="title" placeholder="✏️ Homework Emi? Ex: Maths Page 10">
+<select id="subject">
+<option value="📐 Maths">📐 Maths</option>
+<option value="📖 Telugu">📖 Telugu</option>
+<option value="📘 English">📘 English</option>
+<option value="🔬 Science">🔬 Science</option>
+<option value="🌍 Social">🌍 Social</option>
+<option value="🎨 Drawing">🎨 Drawing</option>
+<option value="💻 Computer">💻 Computer</option>
+</select>
+<input type="time" id="time">
+<button class="add" onclick="addTask()">➕ Homework Add Cheyyi</button>
+<button class="add" style="background:#636e72;margin-top:8px" onclick="askNotify()">🔔 Reminder ON Cheyyi</button>
+</div>
+
+<div class="filter">
+<button class="active" onclick="setF('all',this)">Anni</button>
+<button onclick="setF('todo',this)">Migilindi</button>
+<button onclick="setF('done',this)">Ayipoyindi</button>
+</div>
+
+<div id="list"></div>
+<button onclick="clearDone()" style="width:100%;padding:12px;background:white;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:5px">🧹 Ayipoyina Vi Clear Cheyyi</button>
+</div>
+
+<div class="alarm" id="alarm">
+<div class="alarm-box">
+<div style="font-size:60px">⏰</div>
+<h2>Homework Time!</h2>
+<p id="alarmText" style="margin:12px 0;font-size:18px"></p>
+<button onclick="closeAlarm()" style="padding:12px 25px;background:#00b894;color:white;border:none;border-radius:12px;font-weight:bold;font-size:16px;cursor:pointer">OK - Chesthanu! 💪</button>
+</div>
+</div>
+
+<script>
+let tasks = JSON.parse(localStorage.getItem('sumanth_hw') || '[]');
+let filter='all';
+let notified={};
+
+function save(){ localStorage.setItem('sumanth_hw', JSON.stringify(tasks)); show(); }
+function addTask(){
+let t=document.getElementById('title').value.trim();
+let s=document.getElementById('subject').value;
+let tm=document.getElementById('time').value;
+if(!t){ alert('Homework Emi Cheppu Sumanth!'); return; }
+tasks.push({id:Date.now(), title:t, subject:s, time:tm||'Any Time', done:false});
+document.getElementById('title').value='';
+save();
+}
+function toggle(id){
+let task=tasks.find(x=>x.id===id);
+task.done=!task.done;
+save();
+if(task.done){ alert('🎉 Super Sumanth! Homework Ayipoyindi!'); }
+}
+function delTask(id){ tasks=tasks.filter(x=>x.id!==id); save(); }
+function clearDone(){ tasks=tasks.filter(x=>!x.done); save(); }
+function setF(f,btn){
+filter=f;
+document.querySelectorAll('.filter button').forEach(b=>b.classList.remove('active'));
+btn.classList.add('active');
+show();
+}
+function show(){
+let list=tasks.filter(t=>{
+if(filter==='todo') return !t.done;
+if(filter==='done') return t.done;
+return true;
+});
+let doneCount=tasks.filter(t=>t.done).length;
+let pct=tasks.length? Math.round(doneCount/tasks.length*100):0;
+document.getElementById('progText').innerText = tasks.length? `${doneCount} / ${tasks.length} Ayipoyindi! ${pct}% 🎯` : 'Inka Homework Ledu! 🎉';
+document.getElementById('fill').style.width=pct+'%';
+document.getElementById('list').innerHTML = list.map(t=>`
+<div class="card ${t.done?'done':''}">
+<input type="checkbox" class="check" ${t.done?'checked':''} onchange="toggle(${t.id})">
+<div class="emoji">${t.subject.split(' ')[0]}</div>
+<div class="info">
+<div class="title">${t.title}</div>
+<div class="sub">${t.subject}</div>
+<div class="time">⏰ ${t.time}</div>
+</div>
+<button class="del" onclick="delTask(${t.id})">✕</button>
+</div>`).join('') || `<div style="background:white;padding:20px;border-radius:15px;text-align:center">🎉 Homework Ledu! Aadukoo! ⚽</div>`;
+}
+function askNotify(){
+if('Notification' in window){
+Notification.requestPermission().then(p=>{
+if(p==='granted') alert('✅ Reminder ON! Time vaste thane chepthundi!');
+else alert('Reminder kosam Allow nokku Sumanth!');
+});
+} else alert('Ee Phone lo Notification radu, kani App lo Alarm vastundi!');
+}
+function closeAlarm(){ document.getElementById('alarm').style.display='none'; }
+
+setInterval(()=>{
+let now=new Date();
+document.getElementById('clock').innerText=now.toLocaleTimeString('en-IN');
+document.getElementById('today').innerText=now.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'});
+let hhmm=now.toTimeString().slice(0,5);
+tasks.forEach(t=>{
+if(!t.done && t.time===hhmm && !notified[t.id+'-'+hhmm]){
+notified[t.id+'-'+hhmm]=true;
+document.getElementById('alarmText').innerText=`${t.subject} - ${t.title}`;
+document.getElementById('alarm').style.display='flex';
+if(Notification.permission==='granted'){
+new Notification('📚 Homework Time!',{body:`${t.title} - ${t.subject}`});
+}
+}
+});
+},1000);
+document.getElementById('today').innerText=new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'});
+show();
+</script>
+</body>
+</html>
