@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vizag Tools - Free Calculator, EMI, SIP, Age, Word Counter | Visakhapatnam</title>
+<meta name="description" content="Vizag Tools - Visakhapatnam Best Free Online Tools. Calculator, EMI Calculator, SIP, Age, BMI, GST, FD - 100% Free.">
+<style>
+*{margin:0;box-sizing:border-box;font-family:Arial}
+header{background:#0a2a5e;color:white;padding:14px 15px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+header b{font-size:21px} header b span{color:#00d4ff}
+header a{color:white;text-decoration:none;font-size:13px;margin:0 5px}
+.hero{background:linear-gradient(135deg,#0a2a5e,#00a8ff);color:white;text-align:center;padding:45px 15px}
+.hero h1{font-size:34px} .hero h1 span{color:#ffd700}
+.hero p{margin:10px 0}
+.search{max-width:500px;margin:15px auto;background:white;border-radius:30px;display:flex;padding:5px}
+.search input{border:none;outline:none;padding:12px;flex:1;border-radius:30px}
+.search button{background:#ff9500;border:none;padding:12px 20px;border-radius:30px;color:white;font-weight:bold}
+.ad{background:#f0f0f0;border:1px dashed #aaa;text-align:center;padding:25px;margin:15px auto;max-width:900px;border-radius:10px;color:#777;font-size:13px}
+.grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;padding:10px;max-width:1000px;margin:auto}
+.card{background:white;border-radius:15px;box-shadow:0 5px 15px rgba(0,0,0,0.1);width:160px;padding:18px 10px;text-align:center;cursor:pointer}
+.card:hover{transform:scale(1.05)} .card div{font-size:35px} .card h3{font-size:14px;margin:6px 0} .card p{font-size:11px;color:#777}
+.toolBox{display:none;max-width:600px;margin:15px auto;background:white;border-radius:15px;box-shadow:0 5px 20px rgba(0,0,0,0.15);padding:20px}
+.toolBox.active{display:block}
+input,select,textarea{width:100%;padding:12px;margin:6px 0;border:1px solid #ddd;border-radius:10px;font-size:15px}
+button.calc{background:#0a2a5e;color:white;border:none;padding:13px;width:100%;border-radius:10px;font-weight:bold;font-size:16px;margin-top:5px}
+.result{background:#e3f2fd;padding:15px;border-radius:10px;margin-top:10px;font-size:16px;line-height:1.6}
+.calcGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.calcGrid button{padding:16px;font-size:18px;border:none;background:#eee;border-radius:10px;font-weight:bold}
+footer{background:#0a2a5e;color:white;text-align:center;padding:20px;font-size:13px;line-height:1.7}
+.badge{display:inline-block;background:#ffd700;color:#111;padding:5px 12px;border-radius:20px;font-weight:bold;font-size:12px;margin:2px}
+</style>
+</head>
+<body>
+
+<header><b>🌊 VIZAG <span>TOOLS</span></b><div><a href="#tools">Tools</a><a href="#about">About</a><a href="#contact">Contact</a></div></header>
+
+<div class="hero">
+<span class="badge">📍 MADE IN VISAKHAPATNAM</span>
+<h1>Vizag Tools - <span>100% Free!</span></h1>
+<p>Calculator, EMI, SIP, Age, Word Counter - Anni Okka Chota!</p>
+<div class="search"><input id="searchInp" placeholder="Tool Vethuku... Ex: EMI" oninput="searchTool()"><button onclick="searchTool()">Search</button></div>
+<p>⭐ Vizag's No.1 Tools Website | 50,000+ Users</p>
+</div>
+
+<div class="ad">📢 ADVERTISEMENT - Google AdSense Ad Ikkada Vasthundi</div>
+
+<div class="grid" id="tools">
+<div class="card" onclick="openTool('calc')"><div>🧮</div><h3>Calculator</h3><p>Simple Calculator</p></div>
+<div class="card" onclick="openTool('emi')"><div>🏦</div><h3>EMI Calculator</h3><p>Loan EMI Vizag</p></div>
+<div class="card" onclick="openTool('sip')"><div>📈</div><h3>SIP Calculator</h3><p>Mutual Fund</p></div>
+<div class="card" onclick="openTool('age')"><div>🎂</div><h3>Age Calculator</h3><p>Nee Age Entha?</p></div>
+<div class="card" onclick="openTool('word')"><div>✍️</div><h3>Word Counter</h3><p>Words & Chars</p></div>
+<div class="card" onclick="openTool('bmi')"><div>⚖️</div><h3>BMI Calculator</h3><p>Weight Check</p></div>
+<div class="card" onclick="openTool('gst')"><div>🧾</div><h3>GST Calculator</h3><p>GST + Total</p></div>
+<div class="card" onclick="openTool('percent')"><div>%</div><h3>Percentage</h3><p>% Calculator</p></div>
+<div class="card" onclick="openTool('fd')"><div>💰</div><h3>FD Calculator</h3><p>Fixed Deposit</p></div>
+<div class="card" onclick="openTool('password')"><div>🔐</div><h3>Password Gen</h3><p>Strong Password</p></div>
+</div>
+
+<div id="toolArea" style="padding:0 15px">
+<div id="calc" class="toolBox"><h2>🧮 Calculator</h2><input id="calcDisp" readonly placeholder="0"><div class="calcGrid"><button onclick="cAdd('7')">7</button><button onclick="cAdd('8')">8</button><button onclick="cAdd('9')">9</button><button onclick="cAdd('/')">/</button><button onclick="cAdd('4')">4</button><button onclick="cAdd('5')">5</button><button onclick="cAdd('6')">6</button><button onclick="cAdd('*')">x</button><button onclick="cAdd('1')">1</button><button onclick="cAdd('2')">2</button><button onclick="cAdd('3')">3</button><button onclick="cAdd('-')">-</button><button onclick="cAdd('0')">0</button><button onclick="cAdd('.')">.</button><button onclick="document.getElementById('calcDisp').value=''">C</button><button onclick="cAdd('+')">+</button></div><button class="calc" style="background:#ff9500" onclick="calcEq()">= Answer</button><div id="calcRes" class="result" style="display:none"></div></div>
+<div id="emi" class="toolBox"><h2>🏦 EMI Calculator</h2><input id="emiLoan" type="number" placeholder="Loan Amount Ex: 500000"><input id="emiRate" type="number" placeholder="Interest % Ex: 10"><input id="emiYears" type="number" placeholder="Years Ex: 5"><button class="calc" onclick="calcEMI()">Calculate EMI</button><div id="emiRes" class="result" style="display:none"></div></div>
+<div id="sip" class="toolBox"><h2>📈 SIP Calculator</h2><input id="sipAmt" type="number" placeholder="Monthly SIP Ex: 2000"><input id="sipRate" type="number" placeholder="Return % Ex: 12"><input id="sipYears" type="number" placeholder="Years Ex: 10"><button class="calc" onclick="calcSIP()">Calculate SIP</button><div id="sipRes" class="result" style="display:none"></div></div>
+<div id="age" class="toolBox"><h2>🎂 Age Calculator</h2><input id="dob" type="date"><button class="calc" onclick="calcAge()">Calculate Age</button><div id="ageRes" class="result" style="display:none"></div></div>
+<div id="word" class="toolBox"><h2>✍️ Word Counter Pro</h2><textarea id="wordInp" rows="4" placeholder="Ikkada Type Cheyyi..." oninput="countWord()"></textarea><div id="wordRes" class="result">Words: 0 | Characters: 0</div></div>
+<div id="bmi" class="toolBox"><h2>⚖️ BMI Calculator</h2><input id="bmiH" type="number" placeholder="Height in cm Ex: 170"><input id="bmiW" type="number" placeholder="Weight in kg Ex: 65"><button class="calc" onclick="calcBMI()">Check BMI</button><div id="bmiRes" class="result" style="display:none"></div></div>
+<div id="gst" class="toolBox"><h2>🧾 GST Calculator</h2><input id="gstAmt" type="number" placeholder="Amount Ex: 1000"><select id="gstPer"><option value="5">5% GST</option><option value="12">12% GST</option><option value="18" selected>18% GST</option><option value="28">28% GST</option></select><button class="calc" onclick="calcGST()">Calculate GST</button><div id="gstRes" class="result" style="display:none"></div></div>
+<div id="percent" class="toolBox"><h2>% Percentage Calculator</h2><input id="per1" type="number" placeholder="Ex: 50"><input id="per2" type="number" placeholder="Ex: 200"><button class="calc" onclick="calcPer()">Calculate %</button><div id="perRes" class="result" style="display:none"></div></div>
+<div id="fd" class="toolBox"><h2>💰 FD Calculator</h2><input id="fdAmt" type="number" placeholder="Amount Ex: 100000"><input id="fdRate" type="number" placeholder="Interest % Ex: 7"><input id="fdYears" type="number" placeholder="Years Ex: 5"><button class="calc" onclick="calcFD()">Calculate FD</button><div id="fdRes" class="result" style="display:none"></div></div>
+<div id="password" class="toolBox"><h2>🔐 Password Generator</h2><button class="calc" onclick="genPass()">Generate Strong Password</button><div id="passRes" class="result" style="display:none"></div></div>
+</div>
+
+<div class="ad">📢 ADVERTISEMENT - 2nd Ad Ikkada Vasthundi</div>
+
+<div style="max-width:900px;margin:auto;padding:20px" id="about">
+<h2 style="text-align:center">💡 Vizag Tools Enduku?</h2>
+<p style="text-align:center;color:#555;line-height:1.7;margin-top:10px">Vizag Tools - Visakhapatnam nundi Free Tools Website. Gajuwaka, MVP Colony, Dwaraka Nagar, Maddilapalem - Andariki Free ga Calculators. EMI, SIP, FD, GST - Anni Okka Chota. Bookmark Cheskondi!</p>
+<p style="text-align:center;margin-top:10px"><span class="badge">🏖️ RK Beach</span> <span class="badge">🏙️ Vizag</span> <span class="badge">🇮🇳 Andhra Pradesh</span></p>
+</div>
+
+<div style="max-width:900px;margin:auto;padding:10px 20px 30px" id="contact">
+<h2 style="text-align:center">📞 Contact Vizag Tools</h2>
+<p style="text-align:center;margin-top:8px">Email: vizagtools@gmail.com<br>📍 Visakhapatnam, Andhra Pradesh<br>Instagram: @gorleramanna<br>WhatsApp: Share Cheyyandi!</p>
+</div>
+
+<footer>© 2026 Vizag Tools 🌊 | Made By Sumanth 🏆 - Visakhapatnam<br>Privacy Policy | Terms | Contact<br>All Tools 100% Free - Vizag's Own Website!</footer>
+
+<script>
+function openTool(id){ document.querySelectorAll('.toolBox').forEach(t=>t.classList.remove('active')); document.getElementById(id).classList.add('active'); document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
+function searchTool(){ let q=document.getElementById('searchInp').value.toLowerCase(); document.querySelectorAll('.card').forEach(c=>{ c.style.display=c.innerText.toLowerCase().includes(q)?'block':'none'; }); }
+function cAdd(v){ document.getElementById('calcDisp').value+=v; }
+function calcEq(){ try{ let r=eval(document.getElementById('calcDisp').value); let d=document.getElementById('calcRes'); d.style.display='block'; d.innerHTML="Answer: <b>"+r+"</b>"; }catch(e){ alert("Wrong Calculation"); } }
+function calcEMI(){ let P=+document.getElementById('emiLoan').value, r=+document.getElementById('emiRate').value/1200, n=+document.getElementById('emiYears').value*12; let emi=P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1); let d=document.getElementById('emiRes'); d.style.display='block'; d.innerHTML="Monthly EMI: <b>₹"+Math.round(emi).toLocaleString('en-IN')+"</b><br>Total Pay: ₹"+Math.round(emi*n).toLocaleString('en-IN')+"<br>Interest: ₹"+Math.round(emi*n-P).toLocaleString('en-IN'); }
+function calcSIP(){ let m=+document.getElementById('sipAmt').value, r=+document.getElementById('sipRate').value/1200, n=+document.getElementById('sipYears').value*12; let fv=m*((Math.pow(1+r,n)-1)/r)*(1+r); let d=document.getElementById('sipRes'); d.style.display='block'; d.innerHTML="Invested: <b>₹"+(m*n).toLocaleString('en-IN')+"</b><br>Returns: ₹"+Math.round(fv-m*n).toLocaleString('en-IN')+"<br>Total Value: <b>₹"+Math.round(fv).toLocaleString('en-IN')+"</b>"; }
+function calcAge(){ let dob=new Date(document.getElementById('dob').value); let now=new Date(); let age=now.getFullYear()-dob.getFullYear(); if(now.getMonth()<dob.getMonth()||(now.getMonth()==dob.getMonth()&&now.getDate()<dob.getDate())) age--; let d=document.getElementById('ageRes'); d.style.display='block'; d.innerHTML="Nee Age: <b>"+age+" Years</b>"; }
+function countWord(){ let t=document.getElementById('wordInp').value; let w=t.trim()?t.trim().split(/\s+/).length:0; document.getElementById('wordRes').innerHTML="Words: <b>"+w+"</b> | Characters: <b>"+t.length+"</b> | Without Space: <b>"+t.replace(/\s/g,'').length+"</b>"; }
+function calcBMI(){ let h=+document.getElementById('bmiH').value/100, w=+document.getElementById('bmiW').value; let bmi=(w/(h*h)).toFixed(1); let s=bmi<18.5?"Underweight":bmi<25?"Perfect ✅":bmi<30?"Overweight":"Obese"; let d=document.getElementById('bmiRes'); d.style.display='block'; d.innerHTML="BMI: <b>"+bmi+"</b> - "+s; }
+function calcGST(){ let a=+document.getElementById('gstAmt').value, p=+document.getElementById('gstPer').value; let gst=a*p/100; let d=document.getElementById('gstRes'); d.style.display='block'; d.innerHTML="GST: <b>₹"+gst+"</b><br>Total: <b>₹"+(a+gst)+"</b>"; }
+function calcPer(){ let a=+document.getElementById('per1').value, b=+document.getElementById('per2').value; let d=document.getElementById('perRes'); d.style.display='block'; d.innerHTML=a+" is <b>"+((a/b)*100).toFixed(2)+"%</b> of "+b; }
+function calcFD(){ let p=+document.getElementById('fdAmt').value, r=+document.getElementById('fdRate').value/100, n=+document.getElementById('fdYears').value; let m=p*Math.pow(1+r,n); let d=document.getElementById('fdRes'); d.style.display='block'; d.innerHTML="Maturity: <b>₹"+Math.round(m).toLocaleString('en-IN')+"</b><br>Interest: ₹"+Math.round(m-p).toLocaleString('en-IN'); }
+function genPass(){ let chars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$!"; let p=""; for(let i=0;i<12;i++) p+=chars[Math.floor(Math.random()*chars.length)]; let d=document.getElementById('passRes'); d.style.display='block'; d.innerHTML="Password: <b>"+p+"</b><br><button onclick=\"navigator.clipboard.writeText('"+p+"');alert('Copied!')\" style='padding:8px 15px;border:none;background:#111;color:white;border-radius:8px;margin-top:6px'>Copy</button>"; }
+openTool('calc');
+</script>
+</body>
+</html>
